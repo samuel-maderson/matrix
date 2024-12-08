@@ -1,0 +1,10 @@
+curl  -X POST http://localhost:8000/launch-instance \
+    -H 'Content-Type: application/json' \
+    -d '{
+            "instance_name":"app-001",
+            "ssh_key_name":"key-app.pem",
+            "number_of_instances": 2,
+            "instance_type":"t3.micro",
+            "when_instance_start": "1234",
+            "when_instance_shutdown":"1234567"
+        }'

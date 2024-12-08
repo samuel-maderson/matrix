@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch AWS Instance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        form {
+            max-width: 500px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Launch AWS Instance</h1>
+    <form id="launchForm">
+        <label for="instance_name">Instance Name:</label>
+        <input type="text" id="instance_name" name="instance_name" required>
+
+        <label for="ssh_key_name">SSH Key Name:</label>
+        <input type="text" id="ssh_key_name" name="ssh_key_name" required>
+
+        <label for="number_of_instances">Number of Instances:</label>
+        <input type="number" id="number_of_instances" name="number_of_instances" min="1" required>
+
+        <label for="instance_type">Instance Type:</label>
+        <select id="instance_type" name="instance_type" required>
+            <option value="t2.micro">t3.micro</option>
+            <option value="t2.small">t3.small</option>
+            <option value="t2.medium">t3.medium</option>
+        </select>
+
+        <label for="when_instance_start">Instance Start Time:</label>
+        <input type="datetime-local" id="when_instance_start" name="when_instance_start" required>
+
+        <label for="when_instance_shutdown">Instance Shutdown Time:</label>
+        <input type="datetime-local" id="when_instance_shutdown" name="when_instance_shutdown" required>
+
+        <button type="button" onclick="sendRequest()">Launch Instance</button>
+    </form>
+
+    <script>
+        async function sendRequest() {
+
+            api_endpoint = 'http://localhost:8000/launch-instance'
+
+            const formData = {
+                instance_name: document.getElementById('instance_name').value,
+                ssh_key_name: document.getElementById('ssh_key_name').value,
+                number_of_instances: document.getElementById('number_of_instances').value,
+                instance_type: document.getElementById('instance_type').value,
+                when_instance_start: document.getElementById('when_instance_start').value,
+                when_instance_shutdown: document.getElementById('when_instance_shutdown').value,
+            };
+
+            try {
+                const response = await fetch(api_endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Instance launched successfully: ' + JSON.stringify(data));
+                } else {
+                    const errorData = await response.json();
+                    alert('Error: ' + JSON.stringify(errorData));
+                }
+            } catch (error) {
+                alert('Error connecting to the API: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
