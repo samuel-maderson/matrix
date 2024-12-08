@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  DynamoDBTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      TableName: "matrix-table"
+      AttributeDefinitions:
+        - AttributeName: "instance_name"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "instance_name"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"

@@ -59,9 +59,9 @@
 
         <label for="instance_type">Instance Type:</label>
         <select id="instance_type" name="instance_type" required>
-            <option value="t2.micro">t3.micro</option>
-            <option value="t2.small">t3.small</option>
-            <option value="t2.medium">t3.medium</option>
+            <option value="t3.micro">t3.micro</option>
+            <option value="t3.small">t3.small</option>
+            <option value="t3.medium">t3.medium</option>
         </select>
 
         <label for="when_instance_start">Instance Start Time:</label>
@@ -70,19 +70,22 @@
         <label for="when_instance_shutdown">Instance Shutdown Time:</label>
         <input type="datetime-local" id="when_instance_shutdown" name="when_instance_shutdown" required>
 
+        <input type="hidden" id="launched" name="launched" value="1" hidden />
+
         <button type="button" onclick="sendRequest()">Launch Instance</button>
     </form>
 
     <script>
         async function sendRequest() {
 
-            api_endpoint = 'http://localhost:8000/launch-instance'
+            api_endpoint = 'http://localhost:8000/prepare-instance'
 
             const formData = {
                 instance_name: document.getElementById('instance_name').value,
                 ssh_key_name: document.getElementById('ssh_key_name').value,
                 number_of_instances: document.getElementById('number_of_instances').value,
                 instance_type: document.getElementById('instance_type').value,
+                launched: document.getElementById('launched').value,
                 when_instance_start: document.getElementById('when_instance_start').value,
                 when_instance_shutdown: document.getElementById('when_instance_shutdown').value,
             };
